@@ -9,7 +9,7 @@ class Grade:
         self.type = self.response.get("sottotitolo")
         self.description = self.response.get("dettaglio")
         self.grade_display = self.response.get("simbolo")
-        self.grade = self.response.get("valore_numerico")
+        self.grade = self.response.get("voto_numerico")
         self.weight = self.response.get("valore_peso")
 
         self.date = datetime.fromisoformat(self.response.get("data"))
