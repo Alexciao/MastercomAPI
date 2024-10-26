@@ -1,3 +1,4 @@
+import json
 from mastercomapi.structures import Student
 import requests
 import logging
@@ -7,6 +8,7 @@ log.setLevel(logging.DEBUG)
 
 
 class Mastercom:
+
     def __init__(
         self,
         instance: str,
@@ -15,9 +17,11 @@ class Mastercom:
         base_url: str,
         stripe_mid: str,
         stripe_sid: str,
+        json_file: str | None = None,
     ) -> None:
         """
-        Mastercom API Client
+        Mastercom API Client. You can either initialise
+        the client with parameters or by passing in a JSON file.
 
         :param instance: The instance of the school
         :param username: The username you use to login to Mastercom Genitori
@@ -25,7 +29,19 @@ class Mastercom:
         :param base_url: The base URL of the school's Mastercom website
         :param stripe_mid: The __stripe_mid cookie
         :param stripe_sid: The __stripe_sid cookie
+
+        :param json_file: The path to the JSON file containing the credentials
         """
+
+        if json_file:
+            with open(json_file, "r") as file:
+                data = json.load(file)
+                instance = data.get("instance")
+                username = data.get("username")
+                password = data.get("password")
+                base_url = data.get("base_url")
+                stripe_mid = data.get("stripe_mid")
+                stripe_sid = data.get("stripe_sid")
 
         self.instance = instance
         self.username = username
