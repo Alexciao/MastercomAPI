@@ -6,6 +6,7 @@ class Grade:
         self.response = response
 
         self.subject = self.response.get("titolo")
+        self.subject_id = self.response.get("id_materia")
         self.type = self.response.get("sottotitolo")
         self.description = self.response.get("dettaglio")
         self.grade_display = self.response.get("simbolo")
@@ -23,6 +24,7 @@ class Grade:
     def to_dict(self) -> dict:
         return {
             "subject": self.subject,
+            "subject_id": self.subject_id,
             "type": self.type,
             "description": self.description,
             "grade_display": self.grade_display,
