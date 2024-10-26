@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mastercomapi"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Alex Corazza <alex.corazza@icloud.com>"]
 readme = "README.md"
