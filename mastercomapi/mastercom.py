@@ -46,6 +46,27 @@ class Mastercom:
                 "Not all credentials were provided! To fix this, you can either provide a JSON file with all the credentials (recommended) or pass them into the class. Please remember to keep your creds safe."
             )
 
+        # Create a session object
+        self.session = requests.Session()
+
+        # Set cookies explicitly
+        self.session.cookies.update(
+            {
+                "__stripe_mid": stripe_mid,
+                "__stripe_sid": stripe_sid,
+            }
+        )
+
+        # Authenticate and store token
+        self.auth = self.authenticate()
+
+        self.jwt = self.auth.get("token")
+
+        # Update the session with the authorization token
+        self.session.headers.update({"Authorization": f"JWT {self.jwt}"})
+
+        log.info(f"Authenticated as {self.auth.get('nome')} {self.auth.get('cognome')}")
+
     def _load_from_json(self, json_file: str) -> None:
         """Load credentials from a JSON file."""
         with open(json_file, "r") as file:
