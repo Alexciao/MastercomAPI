@@ -1,4 +1,5 @@
 import json
+import os
 from mastercomapi.structures import Student
 import requests
 import logging
@@ -18,6 +19,7 @@ class Mastercom:
         stripe_mid: str = None,
         stripe_sid: str = None,
         json_file: str | None = None,
+        store_token: bool = False,
     ) -> None:
         """
         Mastercom API Client. You can either initialize
@@ -30,6 +32,7 @@ class Mastercom:
         :param stripe_mid: The __stripe_mid cookie
         :param stripe_sid: The __stripe_sid cookie
         :param json_file: The path to the JSON file containing the credentials
+        :param store_token: Whether to store the JWT token in a file
         """
 
         if json_file:
@@ -45,6 +48,8 @@ class Mastercom:
             raise ValueError(
                 "Not all credentials were provided! To fix this, you can either provide a JSON file with all the credentials (recommended) or pass them into the class. Please remember to keep your creds safe."
             )
+
+        self.store = store_token
 
         # Create a session object
         self.session = requests.Session()
@@ -82,6 +87,10 @@ class Mastercom:
                 raise ValueError(f"Missing key in JSON file: {e}")
 
     def authenticate(self) -> dict:
+        if self.store and os.path.exists("mc_token.json"):
+            with open("mc_token.json", "r") as file:
+                return json.load(file)
+
         url = f"{self.base_url}/api/v4/utenti/login/"
         data = {
             "mastercom": self.instance,
@@ -96,7 +105,13 @@ class Mastercom:
         response.raise_for_status()
 
         # Return the JSON response
-        return response.json()
+        resp = response.json()
+
+        if self.store:
+            with open("mc_token.json", "w") as file:
+                json.dump(resp, file)
+
+        return resp
 
     def get_student(self, student_int: int = 0) -> Student:
         _data = self.auth.get("studenti")[student_int]
