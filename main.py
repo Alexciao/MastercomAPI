@@ -4,12 +4,12 @@ import logging
 
 def main():
     student = Mastercom(
-        instance="steam-bo",
-        password="udscgmz498",
-        username="898004",
-        base_url="https://steam-bo-sito.registroelettronico.com",
-        stripe_mid="d38a02cc-45ef-4064-8800-afa82d6b60659db487",
-        stripe_sid="135ac403-8009-4bbd-98fa-5a6a09f56717c446e8",
+        instance="",
+        password="",
+        username="",
+        base_url="",
+        stripe_mid="",
+        stripe_sid="",
         store_token=True,
     ).get_student()
 
